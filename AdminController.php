@@ -55,4 +55,30 @@ class AdminController extends Controller
 	// alihkan halaman ke halaman pegawai
 	return redirect('/ruangan');
 }
+	public function edit($id)
+{
+	// mengambil data pegawai berdasarkan id yang dipilih
+	$data_ruangan = DB::table('data_ruangan')->where('id',$id)->get();
+	// passing data pegawai yang didapat ke view edit.blade.php
+	return view('admin.edit',['data_ruangan' => $data_ruangan]);
+ 
+}
+public function update(Request $request)
+    {
+        DB::table('data_ruangan')->update([
+            'ruangan' => $request->ruangan,
+            'kapasitas_ruangan' => $request->kapasitas_ruangan,
+            'gambar' => $request->gambar,
+            'fasilitas' => $request->fasilitas
+        ]);
+        $file = $request->file('gambar');
+ 
+		$gambar = time()."_".$file->getClientOriginalName();
+ 
+      	        // isi dengan nama folder tempat kemana file diupload
+		$tujuan_upload = 'gambar';
+		$file->move($tujuan_upload,$gambar);
+    	return redirect('ruangan');
+    }
+	
 }
